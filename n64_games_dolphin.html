@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>N64 Games Collection</title>
+
+  <link rel="icon" href="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" sizes="180x180">
+  <link rel="icon" type="image/png" href="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" sizes="512x512">
+  <meta itemprop="name" content="N64 Games Collection">
+  <meta property="og:title" content="N64 Games Collection">
+  <meta property="og:url" content="">
+  <meta property="og:type" content="website">
+  <meta name="twitter:title" content="N64 Games Collection">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="apple-touch-icon" href="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" sizes="180x180">
+
+  <style>
+    body {
+      background-color: #1a1a1a;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 4px 20px;
+      padding: 0;
+    }
+
+    #results {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      max-width: 1400px;
+      margin: 0 auto;
+      background-color: #1a1a1a;
+      margin-top: 4px;
+      z-index: 1000;
+    }
+
+    .title-card {
+      background: #2a2a2a;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+
+    .title-card:hover {
+      transform: scale(1.05);
+      z-index: 10;
+    }
+
+    .title-card-container {
+      width: 100%;
+      position: relative;
+    }
+
+    .title-card-image-container {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+      background-color: #1a1a1a;
+    }
+
+    .title-card-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s;
+    }
+
+    .title-card-image-container .fallback-title {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px;
+      box-sizing: border-box;
+      background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+      color: #888;
+      font-size: 14px;
+      font-weight: 500;
+      word-break: break-word;
+      border: 1px solid #333;
+    }
+
+    .fill-color-Playable {
+      background-color: #42991b !important;
+      color: white !important;
+      font-weight: 700 !important;
+    }
+
+    .card-body {
+      flex: 1 1 auto;
+      min-height: 1px;
+      padding: 0.5rem 1.25rem !important;
+    }
+
+    .text-center {
+      text-align: center !important;
+    }
+
+    .py-1 {
+      padding-top: 0.25rem !important;
+      padding-bottom: 0.25rem !important;
+    }
+
+    .my-0 {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+    }
+
+    small {
+      font-size: 80%;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Search container */
+    #saved-search-container {
+      position: sticky;
+      z-index: 10000;
+      margin-left: auto;
+      margin-right: auto;
+      margin: 8px 0px;
+    }
+
+    #saved-search-input {
+      padding: 10px;
+      width: calc(100% - 20px);
+      border: 1px solid #555;
+      border-radius: 4px;
+      background: #444;
+      color: white;
+      flex: 1;
+    }
+
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+
+    #saved-search-input::placeholder {
+      color: #aaa;
+    }
+
+    #saved-results-count {
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 5px;
+    }
+
+    /* Hide cards with failed images */
+    .title-card.image-failed {
+      display: none !important;
+    }
+
+    /* Hide cards when searching */
+    .title-card-link.hidden-game {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="saved-search-container">
+    <div class="search-row">
+      <img src="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" class="icon" alt="N64 logo">
+      <input type="text" id="saved-search-input" placeholder="Search games...">
+      <a href="https://www.aliexpress.com/item/1005007539923790.html" target="_blank">
+        <img src="https://cdn.sdappnet.cloud/rtx/images/n64-controller.png" class="icon" alt="N64 Controller">
+      </a>
+      <a href="https://cdn.sdappnet.cloud/rtx/n64_magazine.html" target="_blank">
+        <img src="https://cdn.sdappnet.cloud/rtx/images/n64-magazine.png" class="icon" alt="N64 Magazine">
+      </a>
+    </div>
+    <div id="saved-results-count"></div>
+  </div>
+
+  <div class="row" id="results">
+
+    <div class="col px-1 mb-4 title-card" data-title-name="A Bug's Life (U)" data-cartridge="NUS-NBYE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NBYE-USA.png"
+              loading="lazy"
+              title="A Bug's Life (U)"
+              data-cartridge="NUS-NBYE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">A Bug's Life (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="AeroFighters Assault (U)" data-cartridge="NUS-NERE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NERE-USA.png"
+              loading="lazy"
+              title="AeroFighters Assault (U)"
+              data-cartridge="NUS-NERE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">AeroFighters Assault (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="AeroGauge (U) [!]" data-cartridge="NUS-NAGE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NAGE-USA.png"
+              loading="lazy"
+              title="AeroGauge (U) [!]"
+              data-cartridge="NUS-NAGE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">AeroGauge (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Aidyn Chronicles - The First Mage (U) (V1.0)" data-cartridge="NUS-NAYE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NAYE-USA.png"
+              loading="lazy"
+              title="Aidyn Chronicles - The First Mage (U) (V1.0)"
+              data-cartridge="NUS-NAYE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Aidyn Chronicles - The First Mage (U) (V1.0)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Battlezone - Rise of the Black Dogs (U)" data-cartridge="NUS-NZOE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NZOE-USA.png"
+              loading="lazy"
+              title="Battlezone - Rise of the Black Dogs (U)"
+              data-cartridge="NUS-NZOE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Battlezone - Rise of the Black Dogs (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Beetle Adventure Racing! (U) (M3)" data-cartridge="NUS-NNSE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NNSE-USA.png"
+              loading="lazy"
+              title="Beetle Adventure Racing! (U) (M3)"
+              data-cartridge="NUS-NNSE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Beetle Adventure Racing! (U) (M3)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Big Mountain 2000 (U)" data-cartridge="NUS-NMUE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NMUE-USA.png"
+              loading="lazy"
+              title="Big Mountain 2000 (U)"
+              data-cartridge="NUS-NMUE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Big Mountain 2000 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Bio F.R.E.A.K.S. (U)" data-cartridge="NUS-NBFE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NBFE-USA.png"
+              loading="lazy"
+              title="Bio F.R.E.A.K.S. (U)"
+              data-cartridge="NUS-NBFE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Bio F.R.E.A.K.S. (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Blast Corps (U) (V1.0)" data-cartridge="NUS-NBCE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NBCE-USA.png"
+              loading="lazy"
+              title="Blast Corps (U) (V1.0)"
+              data-cartridge="NUS-NBCE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Blast Corps (U) (V1.0)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Blues Brothers 2000 (U) [!]" data-cartridge="NUS-NBPE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NBPE-USA.png"
+              loading="lazy"
+              title="Blues Brothers 2000 (U) [!]"
+              data-cartridge="NUS-NBPE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Blues Brothers 2000 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Body Harvest (U)" data-cartridge="NUS-NBHE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NBHE-USA.png"
+              loading="lazy"
+              title="Body Harvest (U)"
+              data-cartridge="NUS-NBHE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Body Harvest (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Bomberman Hero (U) [!]" data-cartridge="NUS-NBDE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NBDE-USA.png"
+              loading="lazy"
+              title="Bomberman Hero (U) [!]"
+              data-cartridge="NUS-NBDE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Bomberman Hero (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Bottom of the 9th (U)" data-cartridge="NUS-NBOE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NBOE-USA.png"
+              loading="lazy"
+              title="Bottom of the 9th (U)"
+              data-cartridge="NUS-NBOE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Bottom of the 9th (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Brunswick Circuit Pro Bowling (U)" data-cartridge="NUS-NOWE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NOWE-USA.png"
+              loading="lazy"
+              title="Brunswick Circuit Pro Bowling (U)"
+              data-cartridge="NUS-NOWE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Brunswick Circuit Pro Bowling (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Buck Bumble (U) [!]" data-cartridge="NUS-NBLE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NBLE-USA.png"
+              loading="lazy"
+              title="Buck Bumble (U) [!]"
+              data-cartridge="NUS-NBLE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Buck Bumble (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Bust-A-Move '99 (U)" data-cartridge="NUS-NB3E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NB3E-USA.png"
+              loading="lazy"
+              title="Bust-A-Move '99 (U)"
+              data-cartridge="NUS-NB3E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Bust-A-Move '99 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="California Speed (U) [!]" data-cartridge="NUS-NCLE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NCLE-USA.png"
+              loading="lazy"
+              title="California Speed (U) [!]"
+              data-cartridge="NUS-NCLE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">California Speed (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Carmageddon 64 (U)" data-cartridge="NUS-NCDE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NCDE-USA.png"
+              loading="lazy"
+              title="Carmageddon 64 (U)"
+              data-cartridge="NUS-NCDE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Carmageddon 64 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Castlevania (U) (V1.1)" data-cartridge="NUS-ND3E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-ND3E-USA.png"
+              loading="lazy"
+              title="Castlevania (U) (V1.1)"
+              data-cartridge="NUS-ND3E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Castlevania (U) (V1.1)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Chameleon Twist (U) [!]" data-cartridge="NUS-NCTE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NCTE-USA.png"
+              loading="lazy"
+              title="Chameleon Twist (U) [!]"
+              data-cartridge="NUS-NCTE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Chameleon Twist (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Charlie Blast's Territory (U) [!]" data-cartridge="NUS-NCBE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NCBE-USA.png"
+              loading="lazy"
+              title="Charlie Blast's Territory (U) [!]"
+              data-cartridge="NUS-NCBE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Charlie Blast's Territory (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Chopper Attack (U)" data-cartridge="NUS-NCHE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NCHE-USA.png"
+              loading="lazy"
+              title="Chopper Attack (U)"
+              data-cartridge="NUS-NCHE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Chopper Attack (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Clay Fighter - Sculptor's Cut (U) [!]" data-cartridge="NUS-NC2E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NC2E-USA.png"
+              loading="lazy"
+              title="Clay Fighter - Sculptor's Cut (U) [!]"
+              data-cartridge="NUS-NC2E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Clay Fighter - Sculptor's Cut (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Command & Conquer (U)" data-cartridge="NUS-NCCE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NCCE-USA.png"
+              loading="lazy"
+              title="Command & Conquer (U)"
+              data-cartridge="NUS-NCCE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Command & Conquer (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Conker's Bad Fur Day (U) (Debug)" data-cartridge="NUS-NFUE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NFUE-USA.png"
+              loading="lazy"
+              title="Conker's Bad Fur Day (U) (Debug)"
+              data-cartridge="NUS-NFUE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Conker's Bad Fur Day (U) (Debug)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Cruis'n Exotica (U)" data-cartridge="NUS-NXOE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NXOE-USA.png"
+              loading="lazy"
+              title="Cruis'n Exotica (U)"
+              data-cartridge="NUS-NXOE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Cruis'n Exotica (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Cruis'n USA (U) (V1.0)" data-cartridge="NUS-NCUE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NCUE-USA.png"
+              loading="lazy"
+              title="Cruis'n USA (U) (V1.0)"
+              data-cartridge="NUS-NCUE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Cruis'n USA (U) (V1.0)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Donkey Kong 64 (U)" data-cartridge="NUS-NDOE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NDOE-USA.png"
+              loading="lazy"
+              title="Donkey Kong 64 (U)"
+              data-cartridge="NUS-NDOE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Donkey Kong 64 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Dual Heroes (U)" data-cartridge="NUS-NDHE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NDHE-USA.png"
+              loading="lazy"
+              title="Dual Heroes (U)"
+              data-cartridge="NUS-NDHE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Dual Heroes (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Duke Nukem 64 (Prototype)" data-cartridge="NUS-NDNE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NDNE-USA.png"
+              loading="lazy"
+              title="Duke Nukem 64 (Prototype)"
+              data-cartridge="NUS-NDNE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Duke Nukem 64 (Prototype)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Earthworm Jim 3D (U)" data-cartridge="NUS-NJME-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NJME-USA.png"
+              loading="lazy"
+              title="Earthworm Jim 3D (U)"
+              data-cartridge="NUS-NJME-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Earthworm Jim 3D (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="ECW Hardcore Revolution (U) [!]" data-cartridge="NUS-NWIE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NWIE-USA.png"
+              loading="lazy"
+              title="ECW Hardcore Revolution (U) [!]"
+              data-cartridge="NUS-NWIE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">ECW Hardcore Revolution (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Elmo's Letter Adventure (U) [!]" data-cartridge="NUS-NELE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NELE-USA.png"
+              loading="lazy"
+              title="Elmo's Letter Adventure (U) [!]"
+              data-cartridge="NUS-NELE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Elmo's Letter Adventure (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Elmo's Number Journey (U) [!]" data-cartridge="NUS-NENE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NENE-USA.png"
+              loading="lazy"
+              title="Elmo's Number Journey (U) [!]"
+              data-cartridge="NUS-NENE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Elmo's Number Journey (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Excitebike 64 (U) (V1.0)" data-cartridge="NUS-NMXE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NMXE-USA.png"
+              loading="lazy"
+              title="Excitebike 64 (U) (V1.0)"
+              data-cartridge="NUS-NMXE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Excitebike 64 (U) (V1.0)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Extreme-G (U)" data-cartridge="NUS-NEGE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NEGE-USA.png"
+              loading="lazy"
+              title="Extreme-G (U)"
+              data-cartridge="NUS-NEGE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Extreme-G (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Extreme-G XG2 (U)" data-cartridge="NUS-NG2E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NG2E-USA.png"
+              loading="lazy"
+              title="Extreme-G XG2 (U)"
+              data-cartridge="NUS-NG2E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Extreme-G XG2 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="F-1 Pole Position 64 (U) (M3)" data-cartridge="NUS-NHGE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NHGE-USA.png"
+              loading="lazy"
+              title="F-1 Pole Position 64 (U) (M3)"
+              data-cartridge="NUS-NHGE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">F-1 Pole Position 64 (U) (M3)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="F-1 World Grand Prix (U)" data-cartridge="NUS-NFWE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NFWE-USA.png"
+              loading="lazy"
+              title="F-1 World Grand Prix (U)"
+              data-cartridge="NUS-NFWE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">F-1 World Grand Prix (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="FIFA Soccer 64 (U) [!]" data-cartridge="NUS-N7IE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-N7IE-USA.png"
+              loading="lazy"
+              title="FIFA Soccer 64 (U) [!]"
+              data-cartridge="NUS-N7IE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">FIFA Soccer 64 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Fighting Force 64 (U)" data-cartridge="NUS-NFFE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NFFE-USA.png"
+              loading="lazy"
+              title="Fighting Force 64 (U)"
+              data-cartridge="NUS-NFFE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Fighting Force 64 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Fox Sports College Hoops '99 (U) [!]" data-cartridge="NUS-NF9E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NF9E-USA.png"
+              loading="lazy"
+              title="Fox Sports College Hoops '99 (U) [!]"
+              data-cartridge="NUS-NF9E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Fox Sports College Hoops '99 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Gauntlet Legends (U)" data-cartridge="NUS-NGXE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NGXE-USA.png"
+              loading="lazy"
+              title="Gauntlet Legends (U)"
+              data-cartridge="NUS-NGXE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Gauntlet Legends (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Glover (U)" data-cartridge="NUS-NGVE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NGVE-USA.png"
+              loading="lazy"
+              title="Glover (U)"
+              data-cartridge="NUS-NGVE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Glover (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Goemon's Great Adventure (U)" data-cartridge="NUS-NGME-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NGME-USA.png"
+              loading="lazy"
+              title="Goemon's Great Adventure (U)"
+              data-cartridge="NUS-NGME-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Goemon's Great Adventure (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Golden Nugget 64 (U)" data-cartridge="NUS-NGNE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NGNE-USA.png"
+              loading="lazy"
+              title="Golden Nugget 64 (U)"
+              data-cartridge="NUS-NGNE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Golden Nugget 64 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="GoldenEye 007 (U)" data-cartridge="NUS-NGEE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NGEE-USA.png"
+              loading="lazy"
+              title="GoldenEye 007 (U)"
+              data-cartridge="NUS-NGEE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">GoldenEye 007 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="GT 64 - Championship Edition (U)" data-cartridge="NUS-NGCE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NGCE-USA.png"
+              loading="lazy"
+              title="GT 64 - Championship Edition (U)"
+              data-cartridge="NUS-NGCE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">GT 64 - Championship Edition (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Harvest Moon 64 (U)" data-cartridge="NUS-NYWE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NYWE-USA.png"
+              loading="lazy"
+              title="Harvest Moon 64 (U)"
+              data-cartridge="NUS-NYWE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Harvest Moon 64 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Hexen (U)" data-cartridge="NUS-NHXE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NHXE-USA.png"
+              loading="lazy"
+              title="Hexen (U)"
+              data-cartridge="NUS-NHXE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Hexen (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Hey You, Pikachu! (U) [!]" data-cartridge="NUS-NPGE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NPGE-USA.png"
+              loading="lazy"
+              title="Hey You, Pikachu! (U) [!]"
+              data-cartridge="NUS-NPGE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Hey You, Pikachu! (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Hot Wheels Turbo Racing (U) [!]" data-cartridge="NUS-NHWE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NHWE-USA.png"
+              loading="lazy"
+              title="Hot Wheels Turbo Racing (U) [!]"
+              data-cartridge="NUS-NHWE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Hot Wheels Turbo Racing (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Hybrid Heaven (U) [!]" data-cartridge="NUS-NHVE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NHVE-USA.png"
+              loading="lazy"
+              title="Hybrid Heaven (U) [!]"
+              data-cartridge="NUS-NHVE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Hybrid Heaven (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Iggy's Reckin' Balls (U)" data-cartridge="NUS-NWBE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NWBE-USA.png"
+              loading="lazy"
+              title="Iggy's Reckin' Balls (U)"
+              data-cartridge="NUS-NWBE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Iggy's Reckin' Balls (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Jeopardy! (U) [!]" data-cartridge="NUS-NJOE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NJOE-USA.png"
+              loading="lazy"
+              title="Jeopardy! (U) [!]"
+              data-cartridge="NUS-NJOE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Jeopardy! (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Ken Griffey Jr.'s Slugfest (U)" data-cartridge="NUS-NKJE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NKJE-USA.png"
+              loading="lazy"
+              title="Ken Griffey Jr.'s Slugfest (U)"
+              data-cartridge="NUS-NKJE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Ken Griffey Jr.'s Slugfest (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Killer Instinct Gold (U) (V1.0)" data-cartridge="NUS-NKIE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NKIE-USA.png"
+              loading="lazy"
+              title="Killer Instinct Gold (U) (V1.0)"
+              data-cartridge="NUS-NKIE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Killer Instinct Gold (U) (V1.0)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Kirby 64 - The Crystal Shards (U)" data-cartridge="NUS-NK4E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NK4E-USA.png"
+              loading="lazy"
+              title="Kirby 64 - The Crystal Shards (U)"
+              data-cartridge="NUS-NK4E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Kirby 64 - The Crystal Shards (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Knockout Kings 2000 (U)" data-cartridge="NUS-NKKE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NKKE-USA.png"
+              loading="lazy"
+              title="Knockout Kings 2000 (U)"
+              data-cartridge="NUS-NKKE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Knockout Kings 2000 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="LEGO Racers (U) (M10)" data-cartridge="NUS-NLGE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NLGE-USA.png"
+              loading="lazy"
+              title="LEGO Racers (U) (M10)"
+              data-cartridge="NUS-NLGE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">LEGO Racers (U) (M10)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Lode Runner 3-D (U)" data-cartridge="NUS-NLRE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NLRE-USA.png"
+              loading="lazy"
+              title="Lode Runner 3-D (U)"
+              data-cartridge="NUS-NLRE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Lode Runner 3-D (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Madden Football 64 (U) [!]" data-cartridge="NUS-N8ME-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-N8ME-USA.png"
+              loading="lazy"
+              title="Madden Football 64 (U) [!]"
+              data-cartridge="NUS-N8ME-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Madden Football 64 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Madden NFL 2001 (U) [!]" data-cartridge="NUS-NFLE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NFLE-USA.png"
+              loading="lazy"
+              title="Madden NFL 2001 (U) [!]"
+              data-cartridge="NUS-NFLE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Madden NFL 2001 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Madden NFL 2002 (U) [!]" data-cartridge="NUS-N2ME-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-N2ME-USA.png"
+              loading="lazy"
+              title="Madden NFL 2002 (U) [!]"
+              data-cartridge="NUS-N2ME-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Madden NFL 2002 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Madden NFL 99 (U) [!]" data-cartridge="NUS-N9ME-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-N9ME-USA.png"
+              loading="lazy"
+              title="Madden NFL 99 (U) [!]"
+              data-cartridge="NUS-N9ME-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Madden NFL 99 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Monopoly (U) [!]" data-cartridge="NUS-NMOE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NMOE-USA.png"
+              loading="lazy"
+              title="Monopoly (U) [!]"
+              data-cartridge="NUS-NMOE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Monopoly (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Monster Truck Madness 64 (U) [!]" data-cartridge="NUS-NM3E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NM3E-USA.png"
+              loading="lazy"
+              title="Monster Truck Madness 64 (U) [!]"
+              data-cartridge="NUS-NM3E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Monster Truck Madness 64 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Nagano Winter Olympics '98 (U) [!]" data-cartridge="NUS-NH5E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NH5E-USA.png"
+              loading="lazy"
+              title="Nagano Winter Olympics '98 (U) [!]"
+              data-cartridge="NUS-NH5E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Nagano Winter Olympics '98 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="NBA Courtside 2 - Featuring Kobe Bryant (U)" data-cartridge="NUS-NCKE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NCKE-USA.png"
+              loading="lazy"
+              title="NBA Courtside 2 - Featuring Kobe Bryant (U)"
+              data-cartridge="NUS-NCKE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">NBA Courtside 2 - Featuring Kobe Bryant (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="NBA In the Zone '98 (U) [!]" data-cartridge="NUS-NBAE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NBAE-USA.png"
+              loading="lazy"
+              title="NBA In the Zone '98 (U) [!]"
+              data-cartridge="NUS-NBAE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">NBA In the Zone '98 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Paper Mario (U)" data-cartridge="NUS-NMQE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NMQE-USA.png"
+              loading="lazy"
+              title="Paper Mario (U)"
+              data-cartridge="NUS-NMQE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Paper Mario (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Quake II (U)" data-cartridge="NUS-NQ2E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NQ2E-USA.png"
+              loading="lazy"
+              title="Quake II (U)"
+              data-cartridge="NUS-NQ2E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Quake II (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Quest 64 (U)" data-cartridge="NUS-NETE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NETE-USA.png"
+              loading="lazy"
+              title="Quest 64 (U)"
+              data-cartridge="NUS-NETE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Quest 64 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Rally Challenge 2000 (U)" data-cartridge="NUS-NWQE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NWQE-USA.png"
+              loading="lazy"
+              title="Rally Challenge 2000 (U)"
+              data-cartridge="NUS-NWQE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Rally Challenge 2000 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Roadsters (U) [!]" data-cartridge="NUS-NRRE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NRRE-USA.png"
+              loading="lazy"
+              title="Roadsters (U) [!]"
+              data-cartridge="NUS-NRRE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Roadsters (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Robotron 64 (U) [!]" data-cartridge="NUS-NRXE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NRXE-USA.png"
+              loading="lazy"
+              title="Robotron 64 (U) [!]"
+              data-cartridge="NUS-NRXE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Robotron 64 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Rocket - Robot on Wheels (U)" data-cartridge="NUS-NSUE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSUE-USA.png"
+              loading="lazy"
+              title="Rocket - Robot on Wheels (U)"
+              data-cartridge="NUS-NSUE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Rocket - Robot on Wheels (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Rugrats - Scavenger Hunt (U) [!]" data-cartridge="NUS-NRGE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NRGE-USA.png"
+              loading="lazy"
+              title="Rugrats - Scavenger Hunt (U) [!]"
+              data-cartridge="NUS-NRGE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Rugrats - Scavenger Hunt (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Rugrats in Paris - The Movie (U)" data-cartridge="NUS-NRKE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NRKE-USA.png"
+              loading="lazy"
+              title="Rugrats in Paris - The Movie (U)"
+              data-cartridge="NUS-NRKE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Rugrats in Paris - The Movie (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Rush 2 - Extreme Racing USA (U) [!]" data-cartridge="NUS-NR2E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NR2E-USA.png"
+              loading="lazy"
+              title="Rush 2 - Extreme Racing USA (U) [!]"
+              data-cartridge="NUS-NR2E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Rush 2 - Extreme Racing USA (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="S.C.A.R.S. (U)" data-cartridge="NUS-NCSE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NCSE-USA.png"
+              loading="lazy"
+              title="S.C.A.R.S. (U)"
+              data-cartridge="NUS-NCSE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">S.C.A.R.S. (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="San Francisco Rush - Extreme Racing (U) [!]" data-cartridge="NUS-NSFE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSFE-USA.png"
+              loading="lazy"
+              title="San Francisco Rush - Extreme Racing (U) [!]"
+              data-cartridge="NUS-NSFE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">San Francisco Rush - Extreme Racing (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="San Francisco Rush 2049 (U)" data-cartridge="NUS-NRUE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NRUE-USA.png"
+              loading="lazy"
+              title="San Francisco Rush 2049 (U)"
+              data-cartridge="NUS-NRUE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">San Francisco Rush 2049 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Scooby-Doo - Classic Creep Capers (U) [!]" data-cartridge="NUS-NSYE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSYE-USA.png"
+              loading="lazy"
+              title="Scooby-Doo - Classic Creep Capers (U) [!]"
+              data-cartridge="NUS-NSYE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Scooby-Doo - Classic Creep Capers (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Shadow Man (U)" data-cartridge="NUS-NSDE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSDE-USA.png"
+              loading="lazy"
+              title="Shadow Man (U)"
+              data-cartridge="NUS-NSDE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Shadow Man (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Snowboard Kids (U) [!]" data-cartridge="NUS-NSKE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSKE-USA.png"
+              loading="lazy"
+              title="Snowboard Kids (U) [!]"
+              data-cartridge="NUS-NSKE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Snowboard Kids (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="South Park - Chef's Luv Shack (U)" data-cartridge="NUS-NCYE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NCYE-USA.png"
+              loading="lazy"
+              title="South Park - Chef's Luv Shack (U)"
+              data-cartridge="NUS-NCYE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">South Park - Chef's Luv Shack (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Space Invaders (U) [!]" data-cartridge="NUS-NIVE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NIVE-USA.png"
+              loading="lazy"
+              title="Space Invaders (U) [!]"
+              data-cartridge="NUS-NIVE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Space Invaders (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Space Station Silicon Valley (U)" data-cartridge="NUS-NSVE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSVE-USA.png"
+              loading="lazy"
+              title="Space Station Silicon Valley (U)"
+              data-cartridge="NUS-NSVE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Space Station Silicon Valley (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Spider-Man (U)" data-cartridge="NUS-NSLE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSLE-USA.png"
+              loading="lazy"
+              title="Spider-Man (U)"
+              data-cartridge="NUS-NSLE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Spider-Man (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Star Fox 64 (U) [!]" data-cartridge="NUS-NFPE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NFPE-USA.png"
+              loading="lazy"
+              title="Star Fox 64 (U) [!]"
+              data-cartridge="NUS-NFPE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Star Fox 64 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Star Wars - Shadows of the Empire (U) (V1.0)" data-cartridge="NUS-NSWE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSWE-USA.png"
+              loading="lazy"
+              title="Star Wars - Shadows of the Empire (U) (V1.0)"
+              data-cartridge="NUS-NSWE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Star Wars - Shadows of the Empire (U) (V1.0)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Star Wars Episode I - Battle for Naboo (U) [!]" data-cartridge="NUS-NNAE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NNAE-USA.png"
+              loading="lazy"
+              title="Star Wars Episode I - Battle for Naboo (U) [!]"
+              data-cartridge="NUS-NNAE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Star Wars Episode I - Battle for Naboo (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Star Wars Episode I - Racer (U)" data-cartridge="NUS-NEPE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NEPE-USA.png"
+              loading="lazy"
+              title="Star Wars Episode I - Racer (U)"
+              data-cartridge="NUS-NEPE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Star Wars Episode I - Racer (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="StarCraft 64 (U)" data-cartridge="NUS-NSQE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSQE-USA.png"
+              loading="lazy"
+              title="StarCraft 64 (U)"
+              data-cartridge="NUS-NSQE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">StarCraft 64 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Stunt Racer 64 (U)" data-cartridge="NUS-NR3E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NR3E-USA.png"
+              loading="lazy"
+              title="Stunt Racer 64 (U)"
+              data-cartridge="NUS-NR3E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Stunt Racer 64 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Supercross 2000 (U)" data-cartridge="NUS-NSXE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSXE-USA.png"
+              loading="lazy"
+              title="Supercross 2000 (U)"
+              data-cartridge="NUS-NSXE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Supercross 2000 (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Superman (U) (M3)" data-cartridge="NUS-NSPE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NSPE-USA.png"
+              loading="lazy"
+              title="Superman (U) (M3)"
+              data-cartridge="NUS-NSPE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Superman (U) (M3)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="The Legend of Zelda - Majora's Mask (U)" data-cartridge="NUS-NZSE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NZSE-USA.png"
+              loading="lazy"
+              title="The Legend of Zelda - Majora's Mask (U)"
+              data-cartridge="NUS-NZSE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">The Legend of Zelda - Majora's Mask (U)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="The Legend of Zelda - Ocarina of Time (U) (V1.0)" data-cartridge="NUS-CZLE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-CZLE-USA.png"
+              loading="lazy"
+              title="The Legend of Zelda - Ocarina of Time (U) (V1.0)"
+              data-cartridge="NUS-CZLE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">The Legend of Zelda - Ocarina of Time (U) (V1.0)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Tony Hawk's Pro Skater (U) (V1.0)" data-cartridge="NUS-NTFE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NTFE-USA.png"
+              loading="lazy"
+              title="Tony Hawk's Pro Skater (U) (V1.0)"
+              data-cartridge="NUS-NTFE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Tony Hawk's Pro Skater (U) (V1.0)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Vigilante 8 (U) [!]" data-cartridge="NUS-NV8E-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NV8E-USA.png"
+              loading="lazy"
+              title="Vigilante 8 (U) [!]"
+              data-cartridge="NUS-NV8E-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Vigilante 8 (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Waialae Country Club - True Golf Classics (U) (V1.0)" data-cartridge="NUS-NWLE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NWLE-USA.png"
+              loading="lazy"
+              title="Waialae Country Club - True Golf Classics (U) (V1.0)"
+              data-cartridge="NUS-NWLE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Waialae Country Club - True Golf Classics (U) (V1.0)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Wayne Gretzky's 3D Hockey (U) [!]" data-cartridge="NUS-NWGE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NWGE-USA.png"
+              loading="lazy"
+              title="Wayne Gretzky's 3D Hockey (U) [!]"
+              data-cartridge="NUS-NWGE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Wayne Gretzky's 3D Hockey (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="World Cup 98 (U) (M8)" data-cartridge="NUS-N8WP-UKV">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-N8WP-UKV.png"
+              loading="lazy"
+              title="World Cup 98 (U) (M8)"
+              data-cartridge="NUS-N8WP-UKV"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">World Cup 98 (U) (M8)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Xena Warrior Princess - Talisman of Fate (U) [!]" data-cartridge="NUS-NXFE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NXFE-USA.png"
+              loading="lazy"
+              title="Xena Warrior Princess - Talisman of Fate (U) [!]"
+              data-cartridge="NUS-NXFE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Xena Warrior Princess - Talisman of Fate (U) [!]</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+    <div class="col px-1 mb-4 title-card" data-title-name="Yoshi's Story (U) (M2)" data-cartridge="NUS-NYSE-USA">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers/NUS-NYSE-USA.png"
+              loading="lazy"
+              title="Yoshi's Story (U) (M2)"
+              data-cartridge="NUS-NYSE-USA"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">Yoshi's Story (U) (M2)</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Convert title cards to links for search functionality
+    function wrapCardsWithLinks() {
+      document.querySelectorAll('.title-card').forEach(card => {
+        // Skip if card image failed
+        if (card.classList.contains('image-failed')) return;
+
+        const title = card.getAttribute('data-title-name');
+        
+        const existingInnerLink = card.querySelector('a');
+        if (existingInnerLink) {
+          while (existingInnerLink.firstChild) {
+            card.insertBefore(existingInnerLink.firstChild, existingInnerLink);
+          }
+          existingInnerLink.remove();
+        }
+
+        let url_path = '';
+        if (title) {
+          url_path = title
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+        }
+
+        if (url_path) {
+          const link = document.createElement('a');
+          link.href = 'https://meyt.netlify.app/search/' + url_path + ' n64';
+          link.className = 'title-card-link';
+          link.rel = 'noopener noreferrer';
+          link.target = '_blank';
+          
+          if (title) link.setAttribute('data-title-name', title);
+
+          card.parentNode.insertBefore(link, card);
+          link.appendChild(card);
+        }
+      });
+    }
+
+    // Run link wrapping after a delay
+    setTimeout(wrapCardsWithLinks, 1000);
+
+    // Search functionality
+    document.getElementById('saved-search-input').addEventListener('input', function (e) {
+      const searchTerm = e.target.value.toLowerCase();
+      const links = document.querySelectorAll('.title-card-link');
+      let count = 0;
+
+      links.forEach(link => {
+        const title = link.getAttribute('data-title-name') || '';
+
+        if (title.toLowerCase().includes(searchTerm) && searchTerm) {
+          link.classList.remove('hidden-game');
+          count++;
+        } else if (searchTerm) {
+          link.classList.add('hidden-game');
+        } else {
+          link.classList.remove('hidden-game');
+        }
+      });
+
+      document.getElementById('saved-results-count').textContent =
+        searchTerm ? `Found ${count} game${count !== 1 ? 's' : ''}` : '';
+    });
+
+    // Keyboard shortcut
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !document.getElementById('saved-search-input').matches(':focus')) {
+        e.preventDefault();
+        document.getElementById('saved-search-input').focus();
+      }
+    });
+
+    // Initial hide of any images that already failed
+    document.querySelectorAll('.title-card img').forEach(img => {
+      if (img.complete && img.naturalHeight === 0) {
+        img.closest('.title-card').classList.add('image-failed');
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -3,50 +3,170 @@
 n64_games_js Games Grid Generator
 Creates an Xemu-style grid website from your n64_games_js games JSON
 Shows title as text overlay when image fails to load
+Uses cartridge code for image filenames
 """
 
 import json
 import os
-from datetime import datetime
 
 # Configuration
 JSON_FILE = "n64_games_js.json"
-OUTPUT_HTML = "n64_games_js.html"
+OUTPUT_HTML = "n64_games_dolphin.html"
 PLACEHOLDER_IMAGE = "https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/master/n64-cover-default.png"
-RAW_BASE_URL = "https://raw.githubusercontent.com/igiteam/n64-covers/tree/master/labels"
+RAW_BASE_URL = "https://raw.githubusercontent.com/igiteam/n64-covers/refs/heads/main/covers"
 
 def load_games_data():
-    """Load games from JSON file and remove duplicates by TITLE"""
+    """Load games from JSON file by matching cover files with cartridge codes"""
     if not os.path.exists(JSON_FILE):
-        print(f"❌ Error: {JSON_FILE} not found!")
-        print("Please run the cover downloader first to generate the JSON file.")
+        print(f"Error: {JSON_FILE} not found!")
         return None
     
+    LABELS_FOLDER = "covers"
+    if not os.path.exists(LABELS_FOLDER):
+        print(f"Error: '{LABELS_FOLDER}' folder not found!")
+        return None
+    
+    # STEP 1: Get all cover files first
+    cover_files = []
+    for f in os.listdir(LABELS_FOLDER):
+        if f.endswith('.png'):
+            # Store both the filename and the code without extension
+            code_without_ext = f.replace('.png', '')
+            cover_files.append({
+                'filename': f,
+                'code_upper': code_without_ext.upper(),
+                'code_lower': code_without_ext.lower(),
+                'code_original': code_without_ext
+            })
+    
+    print(f"Found {len(cover_files)} cover images in {LABELS_FOLDER}/")
+    print("Sample cover codes:", [c['code_original'] for c in cover_files[:5]])
+    
+    # STEP 2: Load JSON data
     with open(JSON_FILE, 'r', encoding='utf-8') as f:
         games = json.load(f)
     
-    # Remove duplicates by TITLE (keep first occurrence)
+    # STEP 3: Create a lookup dictionary for faster matching
+    # Key: cartridge code variations, Value: cover file info
+    cover_lookup = {}
+    for cover in cover_files:
+        # Store multiple variations of the code for matching
+        cover_lookup[cover['code_upper']] = cover
+        cover_lookup[cover['code_lower']] = cover
+        cover_lookup[cover['code_original']] = cover
+        
+        # Also store without region (last part after last dash)
+        if '-' in cover['code_original']:
+            parts = cover['code_original'].split('-')
+            if len(parts) > 1:
+                # Try without the last part
+                without_last = '-'.join(parts[:-1])
+                cover_lookup[without_last.upper()] = cover
+                cover_lookup[without_last.lower()] = cover
+    
+    # STEP 4: Match games with covers
+    matched_games = []
     seen_titles = set()
-    unique_games = []
+    matched_count = 0
+    no_code_count = 0
+    no_match_count = 0
+    
+    # For debugging - track which covers were used
+    used_covers = set()
+    
+    # Loop through each cover file and find matching game
+    for cover in cover_files:
+        cover_code = cover['code_original']
+        found_match = False
+        
+        # Search through games for a matching cartridge_code
+        for game in games:
+            # Skip if no good_name
+            if 'good_name' not in game or not game['good_name']:
+                continue
+            
+            # Check for cartridge_code in various possible fields
+            game_code = None
+            if 'cartridge_code' in game and game['cartridge_code']:
+                game_code = game['cartridge_code']
+            elif 'rom_id' in game and game['rom_id']:
+                # Try rom_id as fallback
+                game_code = game['rom_id']
+            
+            if not game_code:
+                continue
+            
+            # Clean up game code
+            game_code_clean = str(game_code).strip()
+            game_code_upper = game_code_clean.upper()
+            game_code_lower = game_code_clean.lower()
+            
+            # Check if this game matches the cover
+            if (game_code_upper == cover['code_upper'] or 
+                game_code_lower == cover['code_lower'] or
+                game_code_clean == cover['code_original']):
+                
+                title = game['good_name']
+                
+                # Avoid duplicates by title
+                if title not in seen_titles:
+                    seen_titles.add(title)
+                    
+                    # Add cover info to game data
+                    game['cover_filename'] = cover['filename']
+                    game['matched_code'] = game_code_clean
+                    
+                    matched_games.append(game)
+                    matched_count += 1
+                    used_covers.add(cover['filename'])
+                    found_match = True
+                    print(f"✓ Matched: {cover['filename']} -> {title}")
+                    break
+        
+        if not found_match:
+            no_match_count += 1
+            if no_match_count <= 10:  # Show first 10 unmached covers
+                print(f"✗ No match for cover: {cover['filename']}")
+    
+    # Also check for games with codes that might not have covers
+    games_without_covers = 0
     for game in games:
-        title = game['title'].lower().strip()
-        if title not in seen_titles:
-            seen_titles.add(title)
-            unique_games.append(game)
+        if 'cartridge_code' in game and game['cartridge_code']:
+            code = game['cartridge_code'].upper()
+            expected_file = f"{code}.png"
+            if expected_file not in used_covers and expected_file.lower() not in [c.lower() for c in used_covers]:
+                games_without_covers += 1
     
-    if len(unique_games) < len(games):
-        print(f"✅ Removed {len(games) - len(unique_games)} duplicates by title")
+    print(f"\n📊 Cover Matching Results:")
+    print(f"   - Total cover files: {len(cover_files)}")
+    print(f"   - Games matched with covers: {matched_count}")
+    print(f"   - Covers with no game match: {no_match_count}")
+    print(f"   - Games in JSON with codes but no cover: {games_without_covers}")
     
-    print(f"✅ Loaded {len(unique_games)} unique games from {JSON_FILE}")
-    return unique_games
+    if matched_count == 0:
+        print("\n❌ No matches found!")
+        print("   Please check your naming convention.")
+        print("   Example cover: 'NUS-NFUE-USA.png'")
+        print("   Should match game with cartridge_code: 'NUS-NFUE-USA'")
+    
+    return matched_games
+
+def get_cartridge_image_url(game):
+    """Generate image URL from cartridge code if available"""
+    if 'cartridge_code' in game and game['cartridge_code']:
+        cartridge_code = game['cartridge_code'].strip()
+        image_filename = f"{cartridge_code.upper()}.png"
+        return f"{RAW_BASE_URL}/{image_filename}"
+    
+    return PLACEHOLDER_IMAGE
 
 def generate_html(games):
     """Generate the grid website HTML"""
     
-    games.sort(key=lambda x: x['title'].lower())
+    games.sort(key=lambda x: x['good_name'].lower())
     
     total_games = len(games)
-    with_2d = sum(1 for g in games if g['cover_url'] != PLACEHOLDER_IMAGE)
+    with_covers = 0
     
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -54,17 +174,17 @@ def generate_html(games):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gamecube Games Collection</title>
+  <title>N64 Games Collection</title>
 
   <link rel="icon" href="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" type="image/png">
   <link rel="apple-touch-icon" href="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" sizes="180x180">
   <link rel="icon" type="image/png" href="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" sizes="192x192">
   <link rel="icon" type="image/png" href="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" sizes="512x512">
-  <meta itemprop="name" content="Gamecube Games Collection">
-  <meta property="og:title" content="Gamecube Games Collection">
+  <meta itemprop="name" content="N64 Games Collection">
+  <meta property="og:title" content="N64 Games Collection">
   <meta property="og:url" content="">
   <meta property="og:type" content="website">
-  <meta name="twitter:title" content="Gamecube Games Collection">
+  <meta name="twitter:title" content="N64 Games Collection">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="apple-touch-icon" href="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" sizes="180x180">
 
@@ -106,7 +226,7 @@ def generate_html(games):
 
     .title-card-image-container {{
       width: 100%;
-      aspect-ratio: 3/4;
+      aspect-ratio: 4/3;
       overflow: hidden;
       position: relative;
       background-color: #1a1a1a;
@@ -117,11 +237,6 @@ def generate_html(games):
       height: 100%;
       object-fit: cover;
       transition: opacity 0.3s;
-    }}
-
-    /* Style for when image fails to load */
-    .title-card-image-container img.error {{
-      opacity: 0;
     }}
 
     .title-card-image-container .fallback-title {{
@@ -222,13 +337,13 @@ def generate_html(games):
       margin-top: 5px;
     }}
 
-    /* Class for cards with failed images - permanently hidden */
-    .image-failed {{
+    /* Hide cards with failed images */
+    .title-card.image-failed {{
       display: none !important;
     }}
 
-    /* Class for search filtering */
-    .hidden-game {{
+    /* Hide cards when searching */
+    .title-card-link.hidden-game {{
       display: none !important;
     }}
   </style>
@@ -237,13 +352,13 @@ def generate_html(games):
 <body>
   <div id="saved-search-container">
     <div class="search-row">
-      <img src="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" class="icon" alt="Gamecube logo">
+      <img src="https://cdn.sdappnet.cloud/rtx/images/n64-icon.png" class="icon" alt="N64 logo">
       <input type="text" id="saved-search-input" placeholder="Search games...">
       <a href="https://www.aliexpress.com/item/1005007539923790.html" target="_blank">
-        <img src="https://cdn.sdappnet.cloud/rtx/images/n64-controller.png" class="icon" alt="Gamecube">
+        <img src="https://cdn.sdappnet.cloud/rtx/images/n64-controller.png" class="icon" alt="N64 Controller">
       </a>
       <a href="https://cdn.sdappnet.cloud/rtx/n64_magazine.html" target="_blank">
-        <img src="https://cdn.sdappnet.cloud/rtx/images/n64-magazine.png" class="icon" alt="Gamecube Magazine">
+        <img src="https://cdn.sdappnet.cloud/rtx/images/n64-magazine.png" class="icon" alt="N64 Magazine">
       </a>
     </div>
     <div id="saved-results-count"></div>
@@ -253,52 +368,47 @@ def generate_html(games):
 """
 
     for game in games:
-        title = game['title'].replace('"', '&quot;')
+        title = game['good_name'].replace('"', '&quot;')
         
-        if game['cover_url'] != PLACEHOLDER_IMAGE:
-            cover_url = game['cover_url']
-            has_real_cover = True
-        elif game['3d_cover_url'] != PLACEHOLDER_IMAGE:
-            cover_url = game['3d_cover_url']
-            has_real_cover = True
-        else:
-            cover_url = PLACEHOLDER_IMAGE
-            has_real_cover = False
+        cover_url = get_cartridge_image_url(game)
+        has_cartridge_code = 'cartridge_code' in game and game['cartridge_code']
         
-        # If no real cover, show title overlay immediately
-        title_display = "flex" if not has_real_cover else "none"
+        if has_cartridge_code:
+            with_covers += 1
+        
+        cartridge_code = game.get('cartridge_code', '')
         
         html += f"""
-        <div class="col px-1 mb-4 title-card" data-title-name="{title}" data-title-status="Play">
-          <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
-            <div class="mx-auto title-card-container">
-              <div class="title-card-image-container" style="position: relative;">
-                <img
-                  src="{cover_url}"
-                  loading="lazy"
-                  title="{title}"
-                  onerror="this.closest('.title-card').classList.add('image-failed');">
-                <div class="fallback-title" style="display: {title_display}; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">{title}</div>
-              </div>
-              <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
-            </div>
-          </a>
-        </div>"""
+    <div class="col px-1 mb-4 title-card" data-title-name="{title}" data-cartridge="{cartridge_code}">
+      <a target="_blank" rel="norefferer" href="https://github.com/igiteam/n64-covers">
+        <div class="mx-auto title-card-container">
+          <div class="title-card-image-container" style="position: relative;">
+            <img
+              src="{cover_url}"
+              loading="lazy"
+              title="{title}"
+              data-cartridge="{cartridge_code}"
+              onload="this.nextElementSibling.style.display='none';"
+              onerror="this.closest('.title-card').classList.add('image-failed');">
+            <div class="fallback-title" style="display: flex; position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 15px 8px 8px 8px; font-size: 12px; text-align: center; font-weight: 500;">{title}</div>
+          </div>
+          <div class="fill-color-Playable card-body text-center py-1 my-0"><small><strong>Play</strong></small></div>
+        </div>
+      </a>
+    </div>"""
 
     html += f"""
   </div>
 
   <script>
-    // Convert title cards to links
+    // Convert title cards to links for search functionality
     function wrapCardsWithLinks() {{
       document.querySelectorAll('.title-card').forEach(card => {{
         // Skip if card image failed
         if (card.classList.contains('image-failed')) return;
 
-        const serial = card.getAttribute('data-serial');
         const title = card.getAttribute('data-title-name');
-        const status = card.getAttribute('data-title-status');
-
+        
         const existingInnerLink = card.querySelector('a');
         if (existingInnerLink) {{
           while (existingInnerLink.firstChild) {{
@@ -315,47 +425,29 @@ def generate_html(games):
             .replace(/\\s+/g, '-')
             .replace(/-+/g, '-')
             .replace(/^-|-$/g, '');
-        }} else if (serial) {{
-          url_path = serial;
         }}
 
         if (url_path) {{
-          const urlParams = new URLSearchParams(window.location.search);
-          const targetUrl = urlParams.get('url');
           const link = document.createElement('a');
-
-          if (targetUrl) {{
-            link.href = targetUrl.replace(/\\/$/, '') + '/gamecube/' + url_path;
-          }} else {{
-            link.href = 'https://meyt.netlify.app/search/' + url_path + ' gamecube';
-          }}
-
+          link.href = 'https://meyt.netlify.app/search/' + url_path + ' n64';
           link.className = 'title-card-link';
           link.rel = 'noopener noreferrer';
           link.target = '_blank';
           
           if (title) link.setAttribute('data-title-name', title);
-          if (serial) link.setAttribute('data-serial', serial);
-          if (status) link.setAttribute('data-title-status', status);
 
           card.parentNode.insertBefore(link, card);
           link.appendChild(card);
-
-          const badge = card.querySelector('.fill-color-Playable, .status-badge');
-          if (badge && status) {{
-            badge.classList.add('status-' + status.toLowerCase());
-          }}
         }}
       }});
     }}
 
-    // Run link wrapping after a delay to let images fail first
+    // Run link wrapping after a delay
     setTimeout(wrapCardsWithLinks, 1000);
 
-    // Search functionality - FIXED VERSION (NO GREEN BORDERS)
+    // Search functionality
     document.getElementById('saved-search-input').addEventListener('input', function (e) {{
       const searchTerm = e.target.value.toLowerCase();
-      // Target the title-card-link elements directly
       const links = document.querySelectorAll('.title-card-link');
       let count = 0;
 
@@ -363,14 +455,11 @@ def generate_html(games):
         const title = link.getAttribute('data-title-name') || '';
 
         if (title.toLowerCase().includes(searchTerm) && searchTerm) {{
-          // Show this item
           link.classList.remove('hidden-game');
           count++;
         }} else if (searchTerm) {{
-          // Hide this item
           link.classList.add('hidden-game');
         }} else {{
-          // Show all when search is cleared
           link.classList.remove('hidden-game');
         }}
       }});
@@ -399,26 +488,27 @@ def generate_html(games):
 </html>
 """
 
-    return html
+    return html, with_covers
 
 def main():
-    print("🎮 Gamecube Games Grid Generator (Xemu Style)")
+    print("N64 Games Grid Generator")
     print("=" * 50)
     
     games = load_games_data()
     if not games:
         return
     
-    print("🔄 Generating grid website...")
-    html_content = generate_html(games)
+    print("Generating grid website with cartridge code images...")
+    html_content, with_covers = generate_html(games)
     
     with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
         f.write(html_content)
     
-    print(f"✅ Website generated: {OUTPUT_HTML}")
-    print(f"\n📊 Statistics:")
+    print(f"Website generated: {OUTPUT_HTML}")
+    print(f"\nStatistics:")
     print(f"   - Total games: {len(games)}")
-    print(f"   - With 2D covers: {sum(1 for g in games if g['cover_url'] != PLACEHOLDER_IMAGE)}")
+    print(f"   - Games with cartridge codes: {with_covers}")
+    print(f"\nImage URL format: {RAW_BASE_URL}/[cartridge_code].png")
 
 if __name__ == "__main__":
     main()
