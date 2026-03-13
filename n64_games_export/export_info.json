@@ -1,0 +1,21 @@
+{
+  "export_date": "1773439198.3202157",
+  "table": "games",
+  "record_count": 1590,
+  "columns": [
+    "id",
+    "rom_id",
+    "good_name",
+    "internal_name",
+    "status",
+    "region_id",
+    "cartridge_code",
+    "developer_id",
+    "genre_id",
+    "release_date",
+    "release_year",
+    "players",
+    "force_feedback",
+    "cartridge_color_id"
+  ]
+}

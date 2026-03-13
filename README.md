@@ -1,5 +1,10 @@
 # N64 Covers
 
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+
 A collection of N64 covers for use with emulators. This repository serves as a centralized database of N64 game cover art specifically designed to work with the new QT-based version of Project64, [P64-QT](https://github.com/IanSkelskey/p64-qt).
 
 ## Label Examples
@@ -25,27 +30,28 @@ A collection of N64 covers for use with emulators. This repository serves as a c
 </div>
 
 <!-- BEGIN N64 SUMMARY -->
+
 ## Progress Summary by Region
 
-Region | Label Art | Box Art
--------|-----------|--------
-<img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/us.svg' width='30'> USA | <img alt="28%" src="https://progress-bar.xyz/28"> | <img alt="31%" src="https://progress-bar.xyz/31">
-<img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/eu.svg' width='30'> Europe | <img alt="4%" src="https://progress-bar.xyz/4"> | <img alt="0%" src="https://progress-bar.xyz/0">
-<img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/jp.svg' width='30'> Japan | <img alt="7%" src="https://progress-bar.xyz/7"> | <img alt="0%" src="https://progress-bar.xyz/0">
-<img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/de.svg' width='30'> Germany | <img alt="0%" src="https://progress-bar.xyz/0"> | <img alt="0%" src="https://progress-bar.xyz/0">
-<img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/fr.svg' width='30'> France | <img alt="4%" src="https://progress-bar.xyz/4"> | <img alt="0%" src="https://progress-bar.xyz/0">
-<img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/it.svg' width='30'> Italy | <img alt="0%" src="https://progress-bar.xyz/0"> | <img alt="0%" src="https://progress-bar.xyz/0">
-<img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/es.svg' width='30'> Spain | <img alt="0%" src="https://progress-bar.xyz/0"> | <img alt="0%" src="https://progress-bar.xyz/0">
-<img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/au.svg' width='30'> Australia | <img alt="37%" src="https://progress-bar.xyz/37"> | <img alt="0%" src="https://progress-bar.xyz/0">
+| Region                                                                                         | Label Art                                         | Box Art                                           |
+| ---------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- |
+| <img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/us.svg' width='30'> USA       | <img alt="28%" src="https://progress-bar.xyz/28"> | <img alt="31%" src="https://progress-bar.xyz/31"> |
+| <img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/eu.svg' width='30'> Europe    | <img alt="4%" src="https://progress-bar.xyz/4">   | <img alt="0%" src="https://progress-bar.xyz/0">   |
+| <img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/jp.svg' width='30'> Japan     | <img alt="7%" src="https://progress-bar.xyz/7">   | <img alt="0%" src="https://progress-bar.xyz/0">   |
+| <img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/de.svg' width='30'> Germany   | <img alt="0%" src="https://progress-bar.xyz/0">   | <img alt="0%" src="https://progress-bar.xyz/0">   |
+| <img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/fr.svg' width='30'> France    | <img alt="4%" src="https://progress-bar.xyz/4">   | <img alt="0%" src="https://progress-bar.xyz/0">   |
+| <img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/it.svg' width='30'> Italy     | <img alt="0%" src="https://progress-bar.xyz/0">   | <img alt="0%" src="https://progress-bar.xyz/0">   |
+| <img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/es.svg' width='30'> Spain     | <img alt="0%" src="https://progress-bar.xyz/0">   | <img alt="0%" src="https://progress-bar.xyz/0">   |
+| <img src='https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/au.svg' width='30'> Australia | <img alt="37%" src="https://progress-bar.xyz/37"> | <img alt="0%" src="https://progress-bar.xyz/0">   |
 
 <!-- END N64 SUMMARY -->
-
 
 ## Project64 QT Redesign
 
 I am currently working on redesigning Project64 with a QT framework frontend. The project is currently in **early development** stage and is not yet a working emulator, but rather a foundational UI framework that will eventually connect to the Project64 emulation core.
 
 Features planned for P64-QT include:
+
 - Cover grid view (already implemented)
 - Integrated cover downloader (planned)
 - Modern Qt-based interface with better scaling and theming
@@ -64,7 +70,7 @@ For proper detection in Project64-QT, all cover images must be named according t
 
 ### Where to Find the Cartridge Code
 
-*Screenshots showing where to find the full cartridge code on N64 cartridges will be added here.*
+_Screenshots showing where to find the full cartridge code on N64 cartridges will be added here._
 
 ### Examples
 
