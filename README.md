@@ -1,9 +1,14 @@
 # N64 Covers
 
+[https://n64games.macosxjs.com/](https://n64games.macosxjs.com/)
+
+```
 python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
+```
+
 
 A collection of N64 covers for use with emulators. This repository serves as a centralized database of N64 game cover art specifically designed to work with the new QT-based version of Project64, [P64-QT](https://github.com/IanSkelskey/p64-qt).
 
